@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -15,6 +16,7 @@ import pl.pk.edu.fmi3.photokiller.events.CompareButtonEvent;
 import pl.pk.edu.fmi3.photokiller.events.DeleteButtonEvent;
 import pl.pk.edu.fmi3.photokiller.events.SearchButtonEvent;
 import pl.pk.edu.fmi3.photokiller.events.ChangeButtonEvent.ChangeName;
+import pl.pk.edu.fmi3.photokiller.models.FileModelForTableView;
 /**
  * 
  * @author Michał Policht - michal85so@gmail.com
@@ -28,6 +30,10 @@ public class GUICreator implements GuiCreatorInterface{
 	private final String URI_TO_COMPARE_ICON = "Resource/WorkGroup.png";
 	private File sourcePath;
 	private File searchPath;
+	
+	private TableView<FileModelForTableView> tabFiles;
+	private TextField tfSourcePath;
+	private TextField tfSearchPath;
 	
 	/**
 	 * Contstructor
@@ -70,17 +76,17 @@ public class GUICreator implements GuiCreatorInterface{
 		GridPane southPane = new GridPane();
 		
 		AbstractControlsFactory labForSource = new LabelControlsFactory("Source path:");
-		AbstractControlsFactory tfForSource = new TextfieldControlsFactory(false);
+		tfSourcePath = TextfieldControlsFactory.createTextField(false);
 		AbstractControlsFactory butForChangeSource = new ButtonControlsFactory("Change");
 		AbstractControlsFactory labForSearch = new LabelControlsFactory("Search path:");
-		AbstractControlsFactory tfForSearch = new TextfieldControlsFactory(false);
+		tfSearchPath = TextfieldControlsFactory.createTextField(false);
 		AbstractControlsFactory butForChangeSearch = new ButtonControlsFactory("Change");
 		
 		GridPane.setConstraints(labForSource.getControl(), 1, 1);
-		GridPane.setConstraints(tfForSource.getControl(), 2, 1);
+		GridPane.setConstraints(tfSourcePath, 2, 1);
 		GridPane.setConstraints(butForChangeSource.getControl(), 3, 1);
 		GridPane.setConstraints(labForSearch.getControl(), 1, 2);
-		GridPane.setConstraints(tfForSearch.getControl(), 2, 2);
+		GridPane.setConstraints(tfSearchPath, 2, 2);
 		GridPane.setConstraints(butForChangeSearch.getControl(), 3, 2);
 		
 		((Button)butForChangeSearch.getControl()).setOnAction(new ChangeButtonEvent(ChangeName.Search, this));
@@ -88,9 +94,9 @@ public class GUICreator implements GuiCreatorInterface{
 		
 		ArrayList<Node> controls = new ArrayList<>();
 		controls.add(labForSource.getControl());
-		controls.add(tfForSource.getControl());
+		controls.add(tfSourcePath);
 		controls.add(labForSearch.getControl());
-		controls.add(tfForSearch.getControl());
+		controls.add(tfSearchPath);
 		controls.add(butForChangeSource.getControl());
 		controls.add(butForChangeSearch.getControl());
 		
@@ -102,8 +108,9 @@ public class GUICreator implements GuiCreatorInterface{
 	 * Method adds controls in the center of main frame
 	 */
 	private void addControlsInside(){
-		AbstractControlsFactory tableView = new TableViewControlsFactory();
-		mainPane.setCenter(tableView.getControl());
+		tabFiles = new TableView<FileModelForTableView>();
+		new TableViewControlsFactory(tabFiles);
+		mainPane.setCenter(tabFiles);
 	}
 	
 	/**
@@ -119,8 +126,7 @@ public class GUICreator implements GuiCreatorInterface{
 	 */
 	public void setSearchFile(File searchFile){
 		searchPath = searchFile;
-		TextField searchTF = ((TextField)((GridPane)mainPane.getChildren().get(1)).getChildren().get(3));
-		searchTF.setText(searchPath.getPath());
+		tfSearchPath.setText(searchPath.getPath());
 	}
 	
 	/**
@@ -128,7 +134,11 @@ public class GUICreator implements GuiCreatorInterface{
 	 */
 	public void setSourceFile(File sourceFile){
 		sourcePath = sourceFile;
-		TextField sourceTF = ((TextField)((GridPane)mainPane.getChildren().get(1)).getChildren().get(1));
-		sourceTF.setText(sourcePath.getPath());
+		tfSourcePath.setText(sourcePath.getPath());
+		
+		//TODO to test only
+		for (FileModelForTableView item : tabFiles.getItems())
+			if (item.getFileSelection())
+				System.out.println(item.getFileName());
 	}
 }

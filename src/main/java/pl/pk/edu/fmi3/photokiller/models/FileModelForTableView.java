@@ -14,12 +14,16 @@ public class FileModelForTableView {
 	StringProperty fileName;
 	StringProperty filePath;
 	
-	public FileModelForTableView(String fileName, String filePath){
-		this.fileSelection = new SimpleBooleanProperty(false);
+	public FileModelForTableView(Boolean fileSelection, String fileName, String filePath){
+		this.fileSelection = new SimpleBooleanProperty(fileSelection);
 		this.fileName = new SimpleStringProperty(fileName);
 		this.filePath = new SimpleStringProperty(filePath);
 	}
 
+	public BooleanProperty getFileSelectionProperty() {
+		return fileSelection;
+	}
+	
 	public Boolean getFileSelection() {
 		return fileSelection.get();
 	}
@@ -28,6 +32,10 @@ public class FileModelForTableView {
 		this.fileSelection.set(fileSelection);
 	}
 
+	public StringProperty getFileNameProperty() {
+		return fileName;
+	}
+	
 	public String getFileName() {
 		return fileName.get();
 	}
@@ -36,6 +44,10 @@ public class FileModelForTableView {
 		this.fileName.set(fileName);
 	}
 
+	public StringProperty getFilePathProperty() {
+		return filePath;
+	}
+	
 	public String getFilePath() {
 		return filePath.get();
 	}

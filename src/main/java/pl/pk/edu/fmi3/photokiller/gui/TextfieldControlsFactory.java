@@ -7,22 +7,35 @@ import javafx.scene.control.TextField;
  * @author Michał Policht - michal85so@gmail.com
  * Factory of textfield controls
  */
-public class TextfieldControlsFactory extends AbstractControlsFactory{
+public class TextfieldControlsFactory {
 	/**
 	 * Constructor
 	 */
-	public TextfieldControlsFactory(){
+	public TextfieldControlsFactory(TextField control){
 		control = new TextField();
-		((TextField)control).setAlignment(Pos.BASELINE_LEFT);
-		((TextField)control).setPrefColumnCount(40);
+		control.setAlignment(Pos.BASELINE_LEFT);
+		control.setPrefColumnCount(40);
 	}
 	
 	/**
 	 * Constructor
 	 * @param editable is editable
 	 */
-	public TextfieldControlsFactory(Boolean editable){
-		this();
-		((TextField)control).setEditable(editable);
+	public TextfieldControlsFactory(TextField control, Boolean editable){
+		this(control);
+		control.setEditable(editable);
+	}
+	
+	public static TextField createTextField(){
+		TextField control = new TextField();
+		control.setAlignment(Pos.BASELINE_LEFT);
+		control.setPrefColumnCount(40);
+		return control;
+	}
+	
+	public static TextField createTextField(Boolean editable){
+		TextField control = createTextField();
+		control.setEditable(editable);
+		return control;
 	}
 }
